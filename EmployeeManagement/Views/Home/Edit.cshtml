@@ -1,13 +1,15 @@
-﻿@model EmployeeCreateViewModel
+﻿@model EmployeeEditViewModel
 
 @{
-    ViewBag.Title = "Create employee";
-}
+    ViewBag.Title = "Edit employee";
 
+    var photoPath = "~/images/" + (Model.ExistingPhotoPath ?? "superMan.jpg");
+
+}
 <div class="container m-3">
-    <h2>Create Employee</h2>
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <form enctype="multipart/form-data" asp-action="create" asp-controller="home" method="post">
+    <form enctype="multipart/form-data" asp-action="Edit" asp-controller="Home" method="post">
+        <input hidden asp-for="Id" />
+        <input hidden asp-for="ExistingPhotoPath" />
         <div class="form-group">
             <label asp-for="Name"></label>
             <input asp-for="Name" class="form-control" autocomplete="off" />
@@ -34,7 +36,11 @@
                 <label class="custom-file-label">Choose photo</label>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="form-group">
+            <img class="imageThumbnail" asp-append-version="true" src="@photoPath" />
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a class="btn btn-primary" asp-action="Index" asp-controller="Home">Cancel</a>
     </form>
 </div>
 
@@ -43,7 +49,7 @@
     <script>
         $(document).ready(function () {
             $(".custom-file-input").on("change",
-                function() {
+                function () {
                     var fileName = $(this).val().split("\\").pop();
                     $(this).next(".custom-file-label").html(fileName);
                 });

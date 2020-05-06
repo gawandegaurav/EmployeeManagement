@@ -15,5 +15,7 @@ namespace EmployeeManagement.DataAccess.Entities
         public string Email { get; set; }
 
         public Department Department { get; set; }
+
+        public string PhotoPath { get; set; }
     }
 }
