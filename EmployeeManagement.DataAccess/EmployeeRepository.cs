@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using EmployeeManagement.DataAccess.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace EmployeeManagement.DataAccess
 {
     public class EmployeeRepository : IEmployeeRepository
     {
         private AppDbContext _dbContext;
+        private readonly ILogger<EmployeeRepository> _logger;
 
-        public EmployeeRepository(AppDbContext appDbContext)
+        public EmployeeRepository(AppDbContext appDbContext, ILogger<EmployeeRepository> logger)
         {
             _dbContext = appDbContext;
+            _logger = logger;
         }
         public Employee Create(Employee employee)
         {
@@ -34,6 +37,13 @@ namespace EmployeeManagement.DataAccess
 
         public Employee GetEmployee(int id)
         {
+            _logger.LogTrace("Log trace.");
+            _logger.LogDebug("Log debug.");
+            _logger.LogInformation("Log information.");
+            _logger.LogWarning("Log warning.");
+            _logger.LogError("Log error.");
+            _logger.LogCritical("Log critical.");
+
             return _dbContext.Employees.FirstOrDefault(x => x.Id == id);
         }
 

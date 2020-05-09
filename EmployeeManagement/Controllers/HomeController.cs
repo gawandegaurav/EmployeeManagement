@@ -5,6 +5,7 @@ using EmployeeManagement.DataAccess.Entities;
 using EmployeeManagement.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace EmployeeManagement.Controllers
 {
@@ -14,11 +15,14 @@ namespace EmployeeManagement.Controllers
     {
         private readonly IEmployeeRepository _repository;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IEmployeeRepository repository, IHostingEnvironment hostingEnvironment)
+        public HomeController(IEmployeeRepository repository, IHostingEnvironment hostingEnvironment, ILogger<HomeController> logger)
         {
             _repository = repository;
             _hostingEnvironment = hostingEnvironment;
+            _logger = logger;
+            _logger.LogDebug(1, "NLog injected into HomeController");
         }
 
         //[Route("")]
@@ -27,6 +31,13 @@ namespace EmployeeManagement.Controllers
         //[Route("[action]")]
         public ViewResult Index()
         {
+            _logger.LogTrace("Log trace.");
+            _logger.LogDebug("Log debug.");
+            _logger.LogInformation("Log information.");
+            _logger.LogWarning("Log warning.");
+            _logger.LogError("Log error.");
+            _logger.LogCritical("Log critical.");
+
             var model = _repository.Read();
             return View(model);
         }
