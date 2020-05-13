@@ -3,6 +3,7 @@ using System.IO;
 using EmployeeManagement.DataAccess;
 using EmployeeManagement.DataAccess.Entities;
 using EmployeeManagement.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,6 +12,7 @@ namespace EmployeeManagement.Controllers
 {
     //[Route("EmployeeHome")]
     //[Route("[controller]/[action]")]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IEmployeeRepository _repository;
@@ -29,6 +31,7 @@ namespace EmployeeManagement.Controllers
         //[Route("EmployeeHome")]
         //[Route("EmployeeHome/GetAll")]
         //[Route("[action]")]
+        [AllowAnonymous]
         public ViewResult Index()
         {
             _logger.LogTrace("Log trace.");

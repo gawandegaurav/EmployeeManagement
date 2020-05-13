@@ -1,9 +1,10 @@
 using EmployeeManagement.DataAccess;
-using EmployeeManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,13 +20,22 @@ namespace EmployeeManagement
         {
             _config = configuration;
         }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_config.GetConnectionString("EmployeeDBConnection")));
-            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddMvc(options =>
+            {
+                options.EnableEndpointRouting = false;
 
+                //Global authorization
+                var authorizationPolicy = new AuthorizationPolicyBuilder();
+
+                var policy = authorizationPolicy.RequireAuthenticatedUser().Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
 
             //services.AddSingleton<IEmployeeRepository, MockEmployeeRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using EmployeeManagement.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,12 +18,14 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterUserViewModel model)
         {
             if (ModelState.IsValid)
@@ -45,6 +48,46 @@ namespace EmployeeManagement.Controllers
                     ModelState.AddModelError("", error.Description);
                 }
             }
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model, string ReturnUrl)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+            if (result.Succeeded)
+            {
+                if (string.IsNullOrEmpty(ReturnUrl))
+                {
+                    return RedirectToAction("Index", "Home");
+
+                }
+                else
+                {
+                    //Url.IsLocalUrl(ReturnUrl);
+                    return LocalRedirect(ReturnUrl);
+                }
+            }
+
+            ModelState.AddModelError("", "Invalid login.");
+
             return View(model);
         }
     }
