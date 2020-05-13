@@ -7,7 +7,7 @@ namespace EmployeeManagement.ViewModels
     {
         [Required]
         [EmailAddress]
-        [Remote(action: "IsEmailInUseAsync", controller: "Account",  HttpMethod ="Get")]
+        //[Remote(action: "IsEmailInUseAsync", controller: "Account",  HttpMethod ="Get")]
         public string Email { get; set; }
 
         [Required]
