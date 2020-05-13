@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using EmployeeManagement.DataAccess.Entities;
+using EmployeeManagement.Utilities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.FileProviders;
 
 namespace EmployeeManagement.ViewModels
 {
     public class EmployeeCreateViewModel
     {
-
         [Required]
         [MaxLength(50, ErrorMessage = "Name cannot exceed 50 characters.")]
         public string Name { get; set; }
 
         [Required]
+        [ValidEmailDomain(allowedDomain: "primetech.com", ErrorMessage = "Email domain must be primetech.com")]
         [Display(Name = "Office email")]
         public string Email { get; set; }
 
