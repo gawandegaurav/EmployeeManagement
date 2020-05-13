@@ -3,6 +3,7 @@ using EmployeeManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace EmployeeManagement.Controllers
 {
@@ -89,6 +90,22 @@ namespace EmployeeManagement.Controllers
             ModelState.AddModelError("", "Invalid login.");
 
             return View(model);
+        }
+
+        //[AcceptVerbs("Get", "Post")]
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> IsEmailInUseAsync(string Email)
+        {
+            var user = await _userManager.FindByEmailAsync(Email);
+            if (user == null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Email {Email} is already in use.");
+            }
         }
     }
 }

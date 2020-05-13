@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagement.ViewModels
 {
@@ -6,6 +7,7 @@ namespace EmployeeManagement.ViewModels
     {
         [Required]
         [EmailAddress]
+        [Remote(action: "IsEmailInUseAsync", controller: "Account",  HttpMethod ="Get")]
         public string Email { get; set; }
 
         [Required]
@@ -13,6 +15,7 @@ namespace EmployeeManagement.ViewModels
         public string Password { get; set; }
 
         [Display(Name = "Confirm password")]
+        [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Passwords did not matched.")]
         public string ConfirmPassword { get; set; }
     }
